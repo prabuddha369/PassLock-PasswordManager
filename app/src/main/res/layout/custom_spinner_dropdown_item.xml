@@ -1,0 +1,10 @@
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/customSpinnerDropdownItemText"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:gravity="center_vertical"
+    android:paddingStart="30dp"
+    android:background="@color/white"
+    android:textSize="15dp"
+    android:textColor="@color/black" />
