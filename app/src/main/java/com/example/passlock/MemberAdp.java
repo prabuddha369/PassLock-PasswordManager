@@ -140,24 +140,30 @@ public class MemberAdp extends RecyclerView.Adapter<MemberAdp.ViewHolder> {
 
             // Remove the data from SharedPreferences
             SharedPreferences sharedPreferences = ctx.getSharedPreferences("Passwords", Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences1 = ctx.getSharedPreferences("Services", Context.MODE_PRIVATE);
             String socialMedia = this.socialMedia;
             String loginId = removedItem.userid;
             String password = removedItem.password;
 
             // Remove login ID and password from SharedPreferences
             SharedPreferences.Editor editor = sharedPreferences.edit();
+            SharedPreferences.Editor editor1= sharedPreferences1.edit();
             String loginIdKey = socialMedia + "uids";
             String passwordKey = socialMedia + "pass";
             ArrayList<String> loginIdList = getStoredDataAsList(sharedPreferences, loginIdKey);
             ArrayList<String> passwordList = getStoredDataAsList(sharedPreferences, passwordKey);
+            ArrayList<String> serviceList = getStoredDataAsList(sharedPreferences1, "ExtraServices");
 
             loginIdList.remove(loginId);
             passwordList.remove(password);
+            serviceList.remove(socialMedia);
 
             // Save the updated lists back to SharedPreferences
             editor.putString(loginIdKey, convertListToJson(loginIdList));
             editor.putString(passwordKey, convertListToJson(passwordList));
+            editor1.putString("ExtraServices", convertListToJson(serviceList));
             editor.apply();
+            editor1.apply();
         }
     }
     private ArrayList<String> getStoredDataAsList(SharedPreferences sharedPreferences, String key) {

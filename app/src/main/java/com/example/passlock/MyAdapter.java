@@ -377,8 +377,41 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 arrayList.add(new ChildItem(loginId, password, imageId[1], imageId[2], imageId[0], imageId[3]));
             }
         }
+        else {
+            SharedPreferences sharedPreferences1 = ctx.getSharedPreferences("Service", Context.MODE_PRIVATE);
+            String extraServicesJson = sharedPreferences1.getString("ExtraServices", "[]");
+            // Convert the JSON array to an ArrayList
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<String>>() {}.getType();
+            ArrayList<String> extraServicesList = gson.fromJson(extraServicesJson, type);
 
+            // Initialize the ArrayList if it's null
+            if (extraServicesList == null) {
+                extraServicesList = new ArrayList<>();
+            }
 
+            // Loop through the ExtraServices list and add their login IDs and passwords
+            for (String serviceName : extraServicesList) {
+                if(parentItemArrayList.get(position).getSocialmedia().equals(serviceName))
+                {
+                    String loginIdJson = sharedPreferences.getString(serviceName + "uids", "[]");
+                    String passwordJson = sharedPreferences.getString(serviceName + "pass", "[]");
+
+                    // Parse the JSON arrays into ArrayLists
+                    Type innerType = new TypeToken<ArrayList<String>>() {}.getType();
+                    ArrayList<String> loginIdList = gson.fromJson(loginIdJson, innerType);
+                    ArrayList<String> passwordList = gson.fromJson(passwordJson, innerType);
+
+                    // Loop through the individual elements and add them to arrayList
+                    for (int i = 0; i < loginIdList.size(); i++) {
+                        String loginId = loginIdList.get(i);
+                        String password = passwordList.get(i);
+
+                        arrayList.add(new ChildItem(loginId, password, imageId[1], imageId[2], imageId[0], imageId[3]));
+                    }
+                }
+            }
+        }
 
         MemberAdp adapterMember = new MemberAdp(arrayList, parentItemArrayList.get(position).getSocialmedia(), holder.nested_rv.getContext());
         holder.nested_rv.setAdapter(adapterMember);

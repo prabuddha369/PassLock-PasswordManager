@@ -25,6 +25,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class More extends AppCompatActivity {
@@ -48,17 +52,39 @@ public class More extends AppCompatActivity {
 
         SharedPreferences sharedPreferencesService = getApplicationContext().getSharedPreferences("Services", Context.MODE_PRIVATE);
         String[] orderID = {"GitHub","Amazon","Microsoft","Apple","Spotify"};
-        int[] imageId = {R.drawable.github,R.drawable.amazon,R.drawable.microsoft,R.drawable.apple,R.drawable.spotify};
+        int[] imageId = {R.drawable.github,R.drawable.amazon,R.drawable.microsoft,R.drawable.apple,R.drawable.spotify,R.drawable.notfound};
         parentItemArrayList = new ArrayList<>();
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Passwords", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences1 = getApplicationContext().getSharedPreferences("Service", Context.MODE_PRIVATE);
 
         for (int i=0 ; i<orderID.length; i++ ){
-            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("Passwords", Context.MODE_PRIVATE);
             String LoginIdJson = sharedPreferences.getString(orderID[i]+"uids", "[]");
             String PasswordJson = sharedPreferences.getString(orderID[i]+"pass", "[]");
             if(!LoginIdJson.equals("[]") && !PasswordJson.equals("[]")){
                 ParentItem parentItem = new ParentItem(orderID[i],imageId[i]);
                 parentItemArrayList.add(parentItem);}
         }
+
+        String extraServicesJson = sharedPreferences1.getString("ExtraServices", "[]");
+        // Convert the JSON array to an ArrayList
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        ArrayList<String> extraServicesList = gson.fromJson(extraServicesJson, type);
+        // Initialize the ArrayList if it's null
+        if (extraServicesList == null) {
+            extraServicesList = new ArrayList<>();
+        }
+        for (String serviceName : extraServicesList) {
+            String loginIdJson = sharedPreferences.getString(serviceName + "uids", "[]");
+            String passwordJson = sharedPreferences.getString(serviceName + "pass", "[]");
+
+            if (!loginIdJson.equals("[]") && !passwordJson.equals("[]")) {
+                ParentItem parentItem = new ParentItem(serviceName, imageId[5]);
+                parentItemArrayList.add(parentItem);
+            }
+        }
+
+
         if(parentItemArrayList.isEmpty())
         {
             hint.setVisibility(View.VISIBLE);
