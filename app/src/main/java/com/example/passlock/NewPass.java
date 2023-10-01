@@ -153,7 +153,7 @@ public class NewPass extends AppCompatActivity {
                     Type type1 = new TypeToken<ArrayList<String>>() {}.getType();
                     ArrayList<String> extraServicesList = gson1.fromJson(extraServicesJson, type1);
                     // Check if the ArrayList is null or empty, and initialize it if necessary
-                    if (extraServicesList == null) {
+                    if (extraServicesList == null){
                         extraServicesList = new ArrayList<>();
                     }
                     // Add 'ser' to the ArrayList if it doesn't already exist
