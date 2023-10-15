@@ -41,5 +41,6 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation "androidx.security:security-crypto:1.1.0-alpha01"
+    implementation 'io.github.itsxtt:pattern-lock:0.2.0'
 
 }
